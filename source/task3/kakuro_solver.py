@@ -452,7 +452,7 @@ def run_benchmarks(name, board):
         ("Full (Preproc + MAC + Heuristics)", True, "mac", True),
     ]
 
-    print(f"\n=== Benchmark: {name} ===")
+    print(f"\nBenchmark: {name}")
     print(
         f"{'Configuration':<35} | {'Status':<7} | {'Nodes':>7} | {'Backtracks':>10} | {'Time (ms)':>9}"
     )
