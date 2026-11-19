@@ -1,26 +1,13 @@
-"""Task 1, Requirement 1: N-Queens as a propositional logic problem.
-
-This module only builds the CNF formulation. Solving with Glucose3 and
-timing experiments belong to Requirement 2.
-"""
-
 from itertools import combinations
 
 
 class NQueensCNFEncoder:
-    """Builds the CNF clauses of the N-Queens problem.
-
-    Variable x(i, j) is True when square (i, j) holds a queen. Each variable
-    is mapped to the positive integer i * N + j + 1 (DIMACS convention).
-    """
-
     def __init__(self, n):
         if n < 1:
             raise ValueError("Board size must be at least 1")
         self.n = n
         self.clauses = []
 
-    # ---------- variables ----------
     def var(self, row, col):
         """Return the integer id of the variable of square (row, col)."""
         return row * self.n + col + 1
@@ -32,7 +19,6 @@ class NQueensCNFEncoder:
     def num_vars(self):
         return self.n * self.n
 
-    # ---------- constraint discovery ----------
     @staticmethod
     def is_attacking(a, b):
         """True if two distinct squares share a row, column or diagonal."""
@@ -54,7 +40,6 @@ class NQueensCNFEncoder:
                 result.append([-self.var(*a), -self.var(*b)])
         return result
 
-    # ---------- CNF generation ----------
     def encode(self):
         """Generate and store all clauses, then return them."""
         self.clauses = self.row_clauses() + self.attack_clauses()
@@ -63,7 +48,6 @@ class NQueensCNFEncoder:
     def num_clauses(self):
         return len(self.clauses)
 
-    # ---------- model handling ----------
     def decode(self, model):
         """Convert a SAT model (list of signed ints) to queen positions."""
         queens = []
@@ -90,12 +74,17 @@ def main():
     for n in (4, 8):
         encoder = NQueensCNFEncoder(n)
         encoder.encode()
-        print("N =", n,
-              "| variables =", encoder.num_vars(),
-              "| clauses =", encoder.num_clauses(),
-              "| formula =", NQueensCNFEncoder.expected_clause_count(n))
+        print(
+            "N =",
+            n,
+            "| variables =",
+            encoder.num_vars(),
+            "| clauses =",
+            encoder.num_clauses(),
+            "| formula =",
+            NQueensCNFEncoder.expected_clause_count(n),
+        )
 
-    # Quick check with the solver (Requirement 2 covers the full experiments)
     try:
         from pysat.solvers import Glucose3
     except ImportError:
