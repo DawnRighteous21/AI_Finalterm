@@ -1,4 +1,5 @@
 import time
+
 from pysat.solvers import Glucose3
 
 
@@ -7,7 +8,9 @@ class NQueensEncoder:
 
     def __init__(self, n: int):
         if n < 4:
-            raise ValueError("N must be >= 4 (N = 2, 3 have no solution; N = 1 is trivial).")
+            raise ValueError(
+                "N must be >= 4 (N = 2, 3 have no solution; N = 1 is trivial)."
+            )
         self.n = n
 
     def var_id(self, i: int, j: int) -> int:
@@ -25,11 +28,11 @@ class NQueensEncoder:
         for i in range(n):
             for j in range(n):
                 a = self.var_id(i, j)
-                for l in range(j + 1, n):                    # same row
+                for l in range(j + 1, n):
                     clauses.append([-a, -self.var_id(i, l)])
-                for k in range(i + 1, n):                    # same column
+                for k in range(i + 1, n):
                     clauses.append([-a, -self.var_id(k, j)])
-                for d in range(1, n - i):                    # two downward diagonals
+                for d in range(1, n - i):
                     if j + d < n:
                         clauses.append([-a, -self.var_id(i + d, j + d)])
                     if j - d >= 0:
@@ -80,7 +83,9 @@ if __name__ == "__main__":
     sizes = [4, 8, 10, 12, 16, 20, 24, 30]
     repeats = 10
 
-    print(f"{'N':>4} | {'Vars':>6} | {'CNF Clauses':>11} | {'Avg Time (ms)':>13} | {'Valid':>5}")
+    print(
+        f"{'N':>4} | {'Vars':>6} | {'CNF Clauses':>11} | {'Avg Time (ms)':>13} | {'Valid':>5}"
+    )
     print("-" * 52)
     first_solutions = {}
     for n in sizes:
@@ -92,7 +97,9 @@ if __name__ == "__main__":
             times.append(ms)
         first_solutions[n] = queens
         avg_ms = sum(times) / repeats
-        print(f"{n:>4} | {n * n:>6} | {len(solver.clauses):>11} | {avg_ms:>13.2f} | {'True':>5}")
+        print(
+            f"{n:>4} | {n * n:>6} | {len(solver.clauses):>11} | {avg_ms:>13.2f} | {'True':>5}"
+        )
 
     for n in (4, 8):
         print(f"\nSolution for N = {n}: {sorted(first_solutions[n])}")
